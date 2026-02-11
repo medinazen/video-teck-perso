@@ -7,7 +7,7 @@ import UserSeeder from "./UserSeeder";
 class ItemSeeder extends AbstractSeeder {
   constructor() {
     // Call the constructor of the parent class (AbstractSeeder) with appropriate options
-    super({ table: "item", truncate: true, dependencies: [UserSeeder] });
+    super({ table: "Movie", truncate: true, dependencies: [UserSeeder] });
   }
 
   // The run method - Populate the 'item' table with fake data
@@ -17,8 +17,8 @@ class ItemSeeder extends AbstractSeeder {
     for (let i = 0; i < 10; i += 1) {
       // Generate fake item data
       const fakeItem = {
-        title: this.faker.lorem.word(), // Generate a fake title using faker library
-        user_id: this.getRef(`user_${i}`).insertId, // Get the insertId of the corresponding user from UserSeeder
+        Title: this.faker.lorem.word(), // Generate a fake title using faker library
+        director_id: this.getRef(`user_${i}`).insertId, // Get the insertId of the corresponding user from UserSeeder
       };
 
       // Insert the fakeItem data into the 'item' table

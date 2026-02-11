@@ -3,7 +3,7 @@ import AbstractSeeder from "./AbstractSeeder";
 class UserSeeder extends AbstractSeeder {
   constructor() {
     // Call the constructor of the parent class (AbstractSeeder) with appropriate options
-    super({ table: "user", truncate: true });
+    super({ table: "User", truncate: true });
   }
 
   // The run method - Populate the 'user' table with fake data
