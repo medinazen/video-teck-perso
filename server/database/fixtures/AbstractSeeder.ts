@@ -65,9 +65,11 @@ abstract class AbstractSeeder implements SeederOptions {
     }
   }
 
-  insert(data: { refName?: string } & object) {
-    this.promises.push(this.#doInsert(data));
-  }
+ insert(data: { refName?: string } & Record<string, unknown>) {
+  const promise = this.#doInsert(data); // On stocke la promesse
+  this.promises.push(promise);
+  return promise; // On la retourne pour pouvoir l'attendre
+}
 
   run() {
     throw new Error("You must implement this function");
