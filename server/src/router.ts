@@ -1,9 +1,13 @@
 import express from "express";
 
+
 const router = express.Router();
 
 /* ************************************************************************* */
 // Define Your API Routes Here
+import { popularMovies } from "./modules/item/popular";
+
+router.get("/api/getPopularMovies", popularMovies);
 /* ************************************************************************* */
 
 // Define item-related routes
