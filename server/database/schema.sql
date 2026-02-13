@@ -45,6 +45,4 @@ CREATE TABLE Movie_Genre(
     PRIMARY KEY (movie_id, genre_id),
     FOREIGN KEY (movie_id) REFERENCES Movie(id) ON DELETE CASCADE,
     FOREIGN KEY (genre_id) REFERENCES Genre(id) ON DELETE CASCADE
-)
-
-;
+);

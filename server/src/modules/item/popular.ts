@@ -1,10 +1,8 @@
 import type { Request, Response } from "express";
-import {getPopularMovies} from  "./fetchMovie";
+import { getPopularMovies } from "./fetchMovie";
 
 export const popularMovies = async (req: Request, res: Response) => {
   try {
-
-
     const movies = await getPopularMovies();
 
     console.log("movi récupérés :", movies.length);
