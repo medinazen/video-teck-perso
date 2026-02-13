@@ -6,13 +6,13 @@ class UserMovieSeeder extends AbstractSeeder{
     constructor(){
         super({
             table: "User_Movie",
-            truncate: true,
+            truncate: false,
             dependencies: [UserSeeder, MovieSeeder]
         });
     }
     async run(){
         // On fait en sorte que chaque utilisateur (5) ait au moins 2 films favoris
-        for (let i = 0; i < 5; i +=1){
+        for (let i = 0; i < 10; i +=1){
             const userRef = this.getRef(`user_${i}`);
             const chosenMovieIds = new Set<number>();
                 while (chosenMovieIds.size < 3) {

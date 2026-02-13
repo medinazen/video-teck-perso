@@ -6,7 +6,7 @@ class MovieGenreSeeder extends AbstractSeeder {
     constructor(){
         super({
             table: "Movie_Genre",
-            truncate: true,
+            truncate: false,
             dependencies: [MovieSeeder, GenreSeeder]
         });
     }

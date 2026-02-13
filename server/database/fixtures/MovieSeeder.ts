@@ -23,11 +23,16 @@ class MovieSeeder extends AbstractSeeder {
     }
 
     await this.insert({ // Ajoute await ici
-        Title: this.faker.lorem.word(), // Generate a fake title using faker library
-        ReleaseYear: this.faker.date.past({ years: 20}).getFullYear(), // Generate a fake release year using faker library
-        Synopsis: this.faker.lorem.sentence(), // Generate a fake synopsis using faker library
-        PosterURL: this.faker.image.urlLoremFlickr({category: 'movie'}), // Generate a fake poster URL using faker library
-        Rating: this.faker.number.float({ min: 1, max: 10, fractionDigits: 1 }), // Generate a fake rating between 1 and 10 using faker library
+        Title: this.faker.lorem.words(3),// Generate a fake title using faker library
+        ReleaseYear: this.faker.date.past({ years: 30}).getFullYear(), // Generate a fake release year using faker library
+        Synopsis: this.faker.lorem.paragraph(), // Generate a fake synopsis using faker library
+        PosterURL: `https://image.tmdb.org/t/p/w500${this.faker.helpers.arrayElement([
+          '/1E5baAaE1UqInhSxs6S3O9S9Oez.jpg', 
+          '/8cdcl3SXOidGbGPVCmS3gc8mYI6.jpg'
+        ])}`, // Generate a fake poster URL using faker library
+        Rating: this.faker.number.float({ min: 1, max: 10, fractionDigits: 1 }),
+        tmdb_id: 100000 + i,
+         // Generate a fake rating between 1 and 10 using faker library
         director_id: directorRef.insertId, // Get the insertId of the corresponding director from DirectorSeeder
         refName: `movie_${i}`,
       });

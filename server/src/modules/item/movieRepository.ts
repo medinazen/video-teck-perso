@@ -2,47 +2,51 @@ import databaseClient from "../../../database/client";
 
 import type { Result, Rows } from "../../../database/client";
 
-type Item = {
+type Movie = {
   id: number;
-  title: string;
-  user_id: number;
+  Title: string;
+  ReleaseYear: number;
+Synopsis: string;
+PosterURL: string;
+Rating: number;
+director_id: number;
 };
 
-class ItemRepository {
-  // The C of CRUD - Create operation
+class MovieRepository {
+  async readAll(){
+    const [rows] = await databaseClient.query<Rows>("select * from Movie");
+    return rows as Movie[];
+  }
+  async read(id: number){
+    const [rows] = await databaseClient.query<Rows>("select * from Movie where id = ?", [id]);
+    return rows[0] as Movie;
+    }
 
-  async create(item: Omit<Item, "id">) {
+  async create(movie: Omit<Movie, "id">) {
     // Execute the SQL INSERT query to add a new item to the "item" table
     const [result] = await databaseClient.query<Result>(
-      "insert into item (title, user_id) values (?, ?)",
-      [item.title, item.user_id],
+      "insert into Movie (Title, ReleaseYear, Synopsis, PosterURL, Rating, director_id) values (?, ?, ?, ?, ?, ?)",
+      [movie.Title, movie.ReleaseYear, movie.Synopsis, movie.PosterURL, movie.Rating, movie.director_id],
     );
-
+return result.insertId;
     // Return the ID of the newly inserted item
-    return result.insertId;
   }
 
   // The Rs of CRUD - Read operations
 
-  async read(id: number) {
+ 
     // Execute the SQL SELECT query to retrieve a specific item by its ID
-    const [rows] = await databaseClient.query<Rows>(
-      "select * from item where id = ?",
-      [id],
-    );
+    
 
     // Return the first row of the result, which represents the item
-    return rows[0] as Item;
-  }
+  
 
-  async readAll() {
+ 
     // Execute the SQL SELECT query to retrieve all items from the "item" table
-    const [rows] = await databaseClient.query<Rows>("select * from item");
+    
 
     // Return the array of items
-    return rows as Item[];
-  }
-
+  
   // The U of CRUD - Update operation
   // TODO: Implement the update operation to modify an existing item
 
@@ -58,4 +62,4 @@ class ItemRepository {
   // }
 }
 
-export default new ItemRepository();
+export default new MovieRepository();

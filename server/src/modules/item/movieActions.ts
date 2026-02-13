@@ -1,16 +1,16 @@
 import type { RequestHandler } from "express";
 
 // Import access to data
-import itemRepository from "./itemRepository";
+import movieRepository from "./movieRepository";
 
 // The B of BREAD - Browse (Read All) operation
 const browse: RequestHandler = async (req, res, next) => {
   try {
     // Fetch all items
-    const items = await itemRepository.readAll();
+    const movies = await movieRepository.readAll();
 
     // Respond with the items in JSON format
-    res.json(items);
+    res.json(movies);
   } catch (err) {
     // Pass any errors to the error-handling middleware
     next(err);
@@ -21,15 +21,14 @@ const browse: RequestHandler = async (req, res, next) => {
 const read: RequestHandler = async (req, res, next) => {
   try {
     // Fetch a specific item based on the provided ID
-    const itemId = Number(req.params.id);
-    const item = await itemRepository.read(itemId);
+    const movie = await movieRepository.read(Number(req.params.id));
 
     // If the item is not found, respond with HTTP 404 (Not Found)
     // Otherwise, respond with the item in JSON format
-    if (item == null) {
+    if (movie == null) {
       res.sendStatus(404);
     } else {
-      res.json(item);
+      res.json(movie);
     }
   } catch (err) {
     // Pass any errors to the error-handling middleware
@@ -41,13 +40,10 @@ const read: RequestHandler = async (req, res, next) => {
 const add: RequestHandler = async (req, res, next) => {
   try {
     // Extract the item data from the request body
-    const newItem = {
-      title: req.body.title,
-      user_id: req.body.user_id,
-    };
+    const { Title, ReleaseYear, Synopsis, PosterURL, Rating, director_id } = req.body;
 
     // Create the item
-    const insertId = await itemRepository.create(newItem);
+    const insertId = await movieRepository.create({Title, ReleaseYear, Synopsis, PosterURL, Rating, director_id });
 
     // Respond with HTTP 201 (Created) and the ID of the newly inserted item
     res.status(201).json({ insertId });

@@ -20,6 +20,7 @@ ReleaseYear INT,
 Synopsis TEXT,
 PosterURL VARCHAR(250),
 Rating FLOAT,
+tmdb_id INT UNIQUE,
 director_id INT,
 FOREIGN KEY (director_id) REFERENCES Director(id)
 );
