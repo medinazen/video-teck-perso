@@ -19,7 +19,6 @@ class UserSeeder extends AbstractSeeder {
         Password: this.faker.internet.password(), // Generate a fake password using faker library
         refName: `user_${i}`, // Create a reference name for the user
       });
-
     }
   }
 }

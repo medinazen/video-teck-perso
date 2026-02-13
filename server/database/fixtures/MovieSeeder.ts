@@ -12,15 +12,16 @@ class MovieSeeder extends AbstractSeeder {
 
   // The run method - Populate the 'item' table with fake data
 
- async run() { // Ajoute async ici
-  for (let i = 0; i < 10; i += 1) {
-    const directorRef = this.getRef(`director_${i}`);
-    
-    // On vérifie si la référence existe pour éviter l'erreur
-    if (!directorRef) {
-      console.error(`Référence director_${i} introuvable !`);
-      continue;
-    }
+  async run() {
+    // Ajoute async ici
+    for (let i = 0; i < 10; i += 1) {
+      const directorRef = this.getRef(`director_${i}`);
+
+      // On vérifie si la référence existe pour éviter l'erreur
+      if (!directorRef) {
+        console.error(`Référence director_${i} introuvable !`);
+        continue;
+      }
 
     await this.insert({ // Ajoute await ici
         Title: this.faker.lorem.words(3),// Generate a fake title using faker library

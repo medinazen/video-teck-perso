@@ -1,6 +1,6 @@
 import AbstractSeeder from "./AbstractSeeder";
-import MovieSeeder from "./MovieSeeder";
 import GenreSeeder from "./GenreSeeder";
+import MovieSeeder from "./MovieSeeder";
 
 class MovieGenreSeeder extends AbstractSeeder {
     constructor(){

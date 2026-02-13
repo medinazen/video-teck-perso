@@ -1,6 +1,6 @@
 import AbstractSeeder from "./AbstractSeeder";
-import UserSeeder from "./UserSeeder";
 import MovieSeeder from "./MovieSeeder";
+import UserSeeder from "./UserSeeder";
 
 class UserMovieSeeder extends AbstractSeeder{
     constructor(){
@@ -19,19 +19,18 @@ class UserMovieSeeder extends AbstractSeeder{
                     const randomMovieIndex = Math.floor(Math.random() * 10);
                     const movieRef = this.getRef(`movie_${randomMovieIndex}`);
 
-                if(userRef && movieRef){
-                    const movieId = movieRef.insertId;
-                    if (!chosenMovieIds.has(movieId)) {
-               
-                    await this.insert({
-                        user_id: userRef.insertId,
-                        movie_id: movieRef.insertId,
-                    });
-                    chosenMovieIds.add(movieId);
-                }
-                }
-            }
+        if (userRef && movieRef) {
+          const movieId = movieRef.insertId;
+          if (!chosenMovieIds.has(movieId)) {
+            await this.insert({
+              user_id: userRef.insertId,
+              movie_id: movieRef.insertId,
+            });
+            chosenMovieIds.add(movieId);
+          }
         }
-        }
+      }
     }
+  }
+}
 export default UserMovieSeeder;
