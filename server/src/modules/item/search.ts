@@ -19,20 +19,18 @@ export const searchMoviesController = async (
       res.status(400).json({ error: "Query manquante" });
       return;
     }
-    if (!query) {
-      res.status(400).json({ error: "Query manquante" });
-      return;
-    }
+
     const safeQuery = query as string;
 
+    console.log("QUERY =>", safeQuery);
+
     const movies = await searchMovies(safeQuery);
+
+    console.log("Movies trouvés:", movies.length);
+
     res.json(movies);
   } catch (err) {
     console.error("Erreur search TMDB:", err);
     res.status(500).json({ error: "Erreur serveur" });
   }
-  console.log("QUERY =>", req.query);
-  console.log("TMDB URL =>", URL.toString());
-  const response = await fetch(URL.toString());
-  console.log("STATUS =>", response.status);
 };

@@ -9,7 +9,10 @@ export const tmdbFetch = async (
 
   url.searchParams.set("api_key", API_KEY);
   url.searchParams.set("language", "fr-FR");
-
+  // biome-ignore lint/complexity/noForEach: <explanation>
+  Object.entries(params).forEach(([key, value]) => {
+    url.searchParams.set(key, value);
+  });
   const response = await fetch(url.toString());
 
   if (!response.ok) {
@@ -25,7 +28,7 @@ export const getPopularMovies = async () => {
   return data.results;
 };
 export const searchMovies = async (query: string) => {
-  const data = await tmdbFetch("/search/movie", { query, langage: "en-US" });
+  const data = await tmdbFetch("/search/movie", { query, language: "en-US" });
 
   return data.results;
 };
