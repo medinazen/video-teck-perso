@@ -32,3 +32,10 @@ export const searchMovies = async (query: string) => {
 
   return data.results;
 };
+export const getMovieDetails = async (id: string) => {
+  const data = await tmdbFetch(`/movie/${id}`, {
+    language: "fr-FR",
+  });
+
+  return data;
+};

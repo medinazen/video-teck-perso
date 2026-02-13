@@ -3,10 +3,19 @@ import movieActions from "./modules/item/movieActions";
 
 const router = express.Router();
 
+import { movieDetailsController } from "./modules/item/detailMovie";
+import { getLibrary } from "./modules/item/getLibrairie";
+import { addMovieToLibrary } from "./modules/item/library";
 /* ************************************************************************* */
 // Define Your API Routes Here
 import { popularMovies } from "./modules/item/popular";
 import { searchMoviesController } from "./modules/item/search";
+
+router.get("/api/library", getLibrary);
+
+router.post("/api/library", addMovieToLibrary);
+
+router.get("/api/movies/:id/tmdb", movieDetailsController);
 
 router.get("/api/getPopularMovies", popularMovies);
 

@@ -7,9 +7,11 @@ const app = express();
 
 // Configure it
 // 2. Autorise ton frontend (port 3000)
-app.use(cors({
-  origin: "http://localhost:3000" 
-}));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+  }),
+);
 /* ************************************************************************* */
 
 // CORS Handling: Why is the current code present and do I need to define specific allowed origins for my project?
@@ -21,7 +23,6 @@ app.use(cors({
 
 // You should NOT do that: such code uses the `cors` module to allow all origins, which can pose security issues.
 // For this pedagogical template, the CORS code allows CLIENT_URL in development mode (when process.env.CLIENT_URL is defined).
-
 
 if (process.env.CLIENT_URL != null) {
   app.use(cors({ origin: [process.env.CLIENT_URL] }));
