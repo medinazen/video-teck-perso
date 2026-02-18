@@ -17,6 +17,13 @@ class MovieRepository {
     const [rows] = await databaseClient.query<Rows>("select * from Movie");
     return rows as Movie[];
   }
+  
+   deleteMovie = async (id: number) => {
+  const client = await import("../../../database/client");
+  const DatabaseClient = client.default;
+  await DatabaseClient.query("delete from Movie where id = ?", [id]);
+};
+
   async read(id: number) {
     const [rows] = await databaseClient.query<Rows>(
       "select * from Movie where id = ?",
@@ -61,10 +68,7 @@ class MovieRepository {
 
   // The D of CRUD - Delete operation
   // TODO: Implement the delete operation to remove an item by its ID
-
-  // async delete(id: number) {
-  //   ...
-  // }
 }
+
 
 export default new MovieRepository();

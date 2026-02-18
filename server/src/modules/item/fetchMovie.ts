@@ -38,4 +38,7 @@ export const getMovieDetails = async (id: string) => {
   });
 
   return data;
+  
+
 };
+
