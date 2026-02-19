@@ -12,8 +12,8 @@ class UserSeeder extends AbstractSeeder {
     // Generate and insert fake data into the 'user' table
     for (let i = 0; i < 10; i += 1) {
       // Generate fake user data
-     await this.insert({
-      Firstname: this.faker.person.firstName(),
+      await this.insert({
+        Firstname: this.faker.person.firstName(),
         Lastname: this.faker.person.lastName(),
         Email: this.faker.internet.email(), // Generate a fake email using faker library
         Password: this.faker.internet.password(), // Generate a fake password using faker library

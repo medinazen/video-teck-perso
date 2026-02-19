@@ -29,8 +29,42 @@ app.use(cors({
   optionsSuccessStatus: 200
 }));
 
-/* --- 2. PARSING DES REQUÊTES --- */
-// Indispensable pour lire le JSON envoyé par le client (ex: login, favoris)
+// You should NOT do that: such code uses the `cors` module to allow all origins, which can pose security issues.
+// For this pedagogical template, the CORS code allows CLIENT_URL in development mode (when process.env.CLIENT_URL is defined).
+
+
+if (process.env.CLIENT_URL != null) {
+  app.use(cors({ origin: [process.env.CLIENT_URL] }));
+}
+
+// If you need to allow extra origins, you can add something like this:
+
+/*
+app.use(
+  cors({
+    origin: ["http://mysite.com", "http://another-domain.com"],
+  }),
+);
+*/
+
+// With ["http://mysite.com", "http://another-domain.com"]
+// to be replaced with an array of your trusted origins
+
+/* ************************************************************************* */
+
+// Request Parsing: Understanding the purpose of this part
+
+// Request parsing is necessary to extract data sent by the client in an HTTP request.
+// For example to access the body of a POST request.
+// The current code contains different parsing options as comments to demonstrate different ways of extracting data.
+
+// 1. `express.json()`: Parses requests with JSON data.
+// 2. `express.urlencoded()`: Parses requests with URL-encoded data.
+// 3. `express.text()`: Parses requests with raw text data.
+// 4. `express.raw()`: Parses requests with raw binary data.
+
+// Uncomment one or more of these options depending on the format of the data sent by your client:
+
 app.use(express.json());
 
 /* --- 3. ROUTES API --- */

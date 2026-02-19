@@ -42,14 +42,15 @@ const read: RequestHandler = async (req, res, next) => {
 const add: RequestHandler = async (req, res, next) => {
   try {
     // Extract the item data from the request body
-    const { Title, ReleaseYear, Synopsis, PosterURL, Rating, tmdb_id, director_id } = req.body;
+    const { Title, ReleaseYear, Synopsis, PosterURL, Rating, tmdb_id, director_id } =
+      req.body;
 // Validation simple pour faire plaisir aux tests (erreur 400 si Title manque)
     if (!Title || !tmdb_id) {
       res.status(400).json({ message: "Missing required fields" });
       return;
     }
     // Create the item
-    const insertId = await movieRepository.create({Title, ReleaseYear, Synopsis, PosterURL, Rating, tmdb_id, director_id });
+    const insertId = await movieRepository.create({Title, ReleaseYear, Synopsis, PosterURL, Rating, director_id });
 
     // Respond with HTTP 201 (Created) and the ID of the newly inserted item
     res.status(201).json({ insertId });

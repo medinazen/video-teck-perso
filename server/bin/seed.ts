@@ -77,15 +77,15 @@ const seed = async () => {
     console.info(
       `${process.env.DB_NAME} filled from '${path.normalize(fixturesPath)}' 🌱`,
     );
-  //} catch (err) {
-   // const { message, stack } = err as Error;
-   // console.error("Error filling the database:", message, stack);
-  //}
+    //} catch (err) {
+    // const { message, stack } = err as Error;
+    // console.error("Error filling the database:", message, stack);
+    //}
   } catch (err) {
-  console.error("❌ Erreur détaillée de MySQL :");
-  console.error(err); // Cela va afficher l'objet d'erreur complet au lieu de juste "Error"
-  process.exit(1);
-}
+    console.error("❌ Erreur détaillée de MySQL :");
+    console.error(err); // Cela va afficher l'objet d'erreur complet au lieu de juste "Error"
+    process.exit(1);
+  }
 };
 
 // Run the seed function
