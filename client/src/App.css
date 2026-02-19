@@ -1,146 +1,335 @@
-* {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 1. Reset et Fond d'écran */
+body, html {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Lato", sans-serif;
-  font-size: 16px;
-  line-height: 1.7;
-  color: #eee;
-  margin: 0;
+  height: 100%;
+  background-color: #000;
 }
 
 #root {
-  height: 100vh;
-  background-image: url("./assets/images/background.webp");
+  min-height: 100vh;
+  /* Utilise ton image de fond avec le rectangle bleu */
+  background: url("./assets/images/background.webp") no-repeat center center fixed;
   background-size: cover;
-  background-position: top;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-rows: 1fr;
-  align-content: start;
-  padding: 1rem;
-}
-
-header {
-  grid-column: 1 / 2;
-  grid-row: 1;
-}
-
-.logo {
-  font-size: larger;
-}
-
-.navbar {
-  grid-column: -2 / -1;
-  grid-row: 1;
-}
-
-.navbar ul {
   display: flex;
-  justify-content: end;
-  gap: 1rem;
-  list-style: none;
+  flex-direction: column;
 }
 
-.navbar a {
-  text-decoration: none;
-  color: #eee;
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
+/* 2. Titre Néon qui clignote (Couleur claire et vive) */
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #ff00de, 0 0 70px #ff00de;
+    color: #fff;
+  }
+  20%, 24%, 55% { 
+    text-shadow: none; 
+    opacity: 0.7; 
+    color: rgba(255, 255, 255, 0.5);
+  }
 }
 
-.navbar a:hover {
-  scale: 110%;
-}
-
-.text-box {
-  grid-column: 1 / -1;
-  grid-row: 1;
-  align-self: center;
+.neon-title {
+  font-family: 'Arial Black', sans-serif;
+  font-size: 3.5rem;
+  color: #fff !important;
+  text-transform: uppercase;
+  font-style: italic;
+  animation: flicker 4s infinite;
+  margin-top: 2rem;
   text-align: center;
 }
 
-.block-primary {
-  text-transform: uppercase;
-  margin-bottom: 2rem;
+/* 3. Navigation avec couleurs de la maquette */
+.nav-btn {
+  font-weight: 900;
+  text-transform: none;
+  letter-spacing: 2px;
+  font-size: 0.8rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: text-shadow 0.3s;
 }
 
-.block-primary-main {
-  font-size: 3em;
-  letter-spacing: 5px;
-  animation: blink 12s infinite;
+.nav-accueil { color: #ffffff !important; }
+.nav-connexion { color: #00f2ff !important; }
+.nav-inscription { color: #ff00de !important; }
+
+.nav-btn:hover {
+  text-shadow: 0 0 8px currentColor;
 }
 
-.block-primary-sub {
-  display: block;
+/* 4. Barre de recherche centrale */
+.search-input {
+  width: 400px;
+  height: 50px; /* Augmenté de 30px à 50px */
+  background: white;
+  border: none;
+  margin-top: 20px;
+  padding: 0 20px;
+  font-size: 18px; /* Écriture plus grande */
   font-weight: bold;
-  letter-spacing: 7px;
+  color: #333;
+  text-transform: uppercase;
+  outline: none;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+.search-input:focus {
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.5); /* Effet néon au clic */
+  background: #fdfdfd;
+}
+.search-input::placeholder {
+  color: #999;
+  font-size: 14px;
 }
 
-.btn:link,
-.btn:visited {
+/* 5. LE BAS DE PAGE (Fixé en bas) */
+.bottom-area {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* Pousse tout vers le bas */
+  min-height: 100px; /* Assure un espace minimum même sans ticker */
+}
+
+/* Ajuster la hauteur pour des affiches plus hautes */
+.ticker-container {
+  background: rgba(0, 0, 0, 0.9);
+  border-top: 1px solid rgba(255, 0, 222, 0.4);
+  height: 300px; /* Augmenté d'un tiers pour accueillir les grandes affiches */
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Animation du défilement */
+@keyframes infinite-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Ralentir le défilement (60s au lieu de 40s) */
+.animate-infinite-scroll {
+  display: flex;
+  width: max-content;
+  animation: infinite-scroll 60s linear infinite; /* Plus lent pour le confort visuel */
+}
+
+
+/* 6. FOOTER : Centré, Espacé et Clair */
+footer {
+  background: #000;
+  padding: 15px 40px;
+  display: flex;
+  justify-content: center; /* Centre tout le contenu horizontalement */
+  align-items: center;
+  gap: 100px; /* Espace entre les liens et le copyright */
+  border-top: 1px solid #222;
+}
+
+.footer-links {
+  display: flex;
+  gap: 40px; /* Espace entre Conditions et Mentions */
+}
+
+.footer-links a, .footer-links span {
+  color: #cccccc; /* Gris clair pour lisibilité sur noir */
+  font-size: 11px;
+  font-weight: bold;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 0.5rem 1rem;
-  display: inline-block;
-  border-radius: 100px;
-  transition: all 0.2s;
+  letter-spacing: 1px;
+}
+
+.footer-links a:hover {
+  color: #fff;
+}
+
+.footer-copyright {
+  color: #ff00de; /* Rose néon pour le copyright */
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+/* Le conteneur du film à l'affiche */
+.featured-card {
+  background: rgba(13, 17, 23, 0.9);
+  border: 1.5px solid #ff00de;
+  box-shadow: 0 0 20px rgba(255, 0, 222, 0.4);
+  border-radius: 10px;
+  padding: 30px;
+  display: flex;
+  gap: 30px;
+  width: 750px;
+  height: 320px;
+  align-items: center;
+}
+
+.featured-card img {
+  width: 140px;
+  height: 200px;
+  border-radius: 5px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.featured-content {
+  text-align: left;
+}
+
+.featured-label {
+  color: #00f2ff; /* Cyan */
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.featured-title {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.featured-desc {
+  color: #ccc;
+  font-size: 11px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.btn-details {
+  background: #ff00de;
+  color: white;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 10px;
+  padding: 8px 20px;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+
+.btn-details:hover {
+  background: #d400b9;
+}
+
+/* Zone principale pour centrer le contenu dans le rectangle bleu */
+
+main {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; 
+  padding-top: 8vh; /* Remonté de 15vh à 8vh */
+}
+/* Vue "DÉTAILS" (Incrustation totale comme sur ton image details.png) */
+.details-overlay {
+  background: rgba(0, 0, 0, 0.95); /* Plus sombre */
+  border: 2px solid #00f2ff; /* Bordure Cyan pour différencier */
+  box-shadow: 0 0 30px rgba(0, 242, 255, 0.3);
+  border-radius: 10px;
+  padding: 40px;
+  display: flex;
+  gap: 40px;
+  width: 850px; /* Plus large pour les détails */
+  height: 450px; /* Plus haut */
+  align-items: flex-start;
+  position: relative;
+}
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  color: #00f2ff;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.details-overlay img {
+  width: 250px;
+  height: 370px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.info-cyan { color: #00f2ff; font-weight: bold; margin-right: 15px; font-size: 14px; }
+/* Style commun des cartes Auth */
+.auth-card {
+  background: rgba(13, 17, 23, 0.95);
+  border-radius: 10px;
+  padding: 40px;
+  width: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: relative;
 }
 
-.btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+/* Version CONNEXION (Cyan) */
+.auth-login {
+  border: 2px solid #00f2ff;
+  box-shadow: 0 0 25px rgba(0, 242, 255, 0.3);
+}
+.auth-login .auth-title { color: #00f2ff; border-bottom: 2px solid #00f2ff; }
+.auth-login .auth-input { border: 1px solid #00f2ff; }
+.auth-login .auth-submit { background: #00f2ff; color: #000; }
+
+/* Version INSCRIPTION (Rose) */
+.auth-register {
+  border: 2px solid #ff00de;
+  box-shadow: 0 0 25px rgba(255, 0, 222, 0.3);
+}
+.auth-register .auth-title { color: #ff00de; border-bottom: 2px solid #ff00de; }
+.auth-register .auth-input { border: 1px solid #ff00de; }
+.auth-register .auth-submit { background: #ff00de; color: #fff; }
+
+.auth-title {
+  font-weight: 900;
+  font-size: 22px;
+  margin-bottom: 30px;
+  letter-spacing: 5px;
+  padding-bottom: 15px;
+  width: 100%;
+  text-align: center;
+  text-transform: none;
 }
 
-.btn:active {
-  transform: translateY(-1px);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+.auth-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.btn-white {
-  background-color: #fff;
-  color: #777;
+.auth-input {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 12px;
+  color: white;
+  font-size: 11px;
+  outline: none;
+  text-transform: uppercase;
 }
 
-footer {
-  grid-column: -2 / -1;
-  grid-row: 1;
-  align-self: end;
-  text-align: right;
+.auth-submit {
+  font-weight: 900;
+  padding: 15px;
+  border: none;
+  cursor: pointer;
+  text-transform: none;
+  margin-top: 10px;
+  transition: opacity 0.2s;
 }
 
-.wcs {
-  text-decoration: none;
-  color: #ff1493ad;
-}
-
-.wcs:hover {
-  text-decoration: underline;
-}
-
-@keyframes blink {
-  20%,
-  24%,
-  55% {
-    color: #111;
-    text-shadow: none;
-  }
-  0%,
-  19%,
-  21%,
-  23%,
-  25%,
-  54%,
-  56%,
-  100% {
-    text-shadow: 0 0 5px #ff1493ad, 0 0 15px #eee, 0 0 20px #ff1493ad, 0 0 40px
-      #a00ac9, 0 0 60px #ff0000, 0 0 10px #970dc5, 0 0 98px #ff0000;
-    color: #fff;
-  }
-}
-
+.auth-submit:hover { opacity: 0.8; }

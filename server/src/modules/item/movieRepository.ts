@@ -9,6 +9,7 @@ type Movie = {
 Synopsis: string;
 PosterURL: string;
 Rating: number;
+tmdb_id: number;
 director_id: number;
 };
 
@@ -25,8 +26,8 @@ class MovieRepository {
   async create(movie: Omit<Movie, "id">) {
     // Execute the SQL INSERT query to add a new item to the "item" table
     const [result] = await databaseClient.query<Result>(
-      "insert into Movie (Title, ReleaseYear, Synopsis, PosterURL, Rating, director_id) values (?, ?, ?, ?, ?, ?)",
-      [movie.Title, movie.ReleaseYear, movie.Synopsis, movie.PosterURL, movie.Rating, movie.director_id],
+      "insert into Movie (Title, ReleaseYear, Synopsis, PosterURL, Rating, tmdb_id, director_id) values (?, ?, ?, ?, ?, ?, ?)",
+      [movie.Title, movie.ReleaseYear, movie.Synopsis, movie.PosterURL, movie.Rating, movie.tmdb_id, movie.director_id],
     );
 return result.insertId;
     // Return the ID of the newly inserted item
@@ -50,16 +51,24 @@ return result.insertId;
   // The U of CRUD - Update operation
   // TODO: Implement the update operation to modify an existing item
 
-  // async update(item: Item) {
-  //   ...
-  // }
+  async update(movie: Movie) {
+    const [result] = await databaseClient.query<Result>(
+      "update Movie set Title = ?, ReleaseYear = ?, Synopsis = ?, PosterURL = ?, Rating = ?, tmdb_id = ?, director_id = ? where id = ?",
+      [movie.Title, movie.ReleaseYear, movie.Synopsis, movie.PosterURL, movie.Rating, movie.tmdb_id, movie.director_id, movie.id]
+    );
+    return result.affectedRows;
+  }
 
   // The D of CRUD - Delete operation
   // TODO: Implement the delete operation to remove an item by its ID
 
-  // async delete(id: number) {
-  //   ...
-  // }
+  async delete(id: number) {
+    const [result] = await databaseClient.query<Result>(
+      "delete from Movie where id = ?",
+      [id]
+    );
+    return result.affectedRows;
+  }
 }
 
 export default new MovieRepository();

@@ -20,10 +20,12 @@ const browse: RequestHandler = async (req, res, next) => {
 // The R of BREAD - Read operation
 const read: RequestHandler = async (req, res, next) => {
   try {
+    
     // Fetch a specific item based on the provided ID
     const movie = await movieRepository.read(Number(req.params.id));
 
     // If the item is not found, respond with HTTP 404 (Not Found)
+    
     // Otherwise, respond with the item in JSON format
     if (movie == null) {
       res.sendStatus(404);
@@ -40,10 +42,14 @@ const read: RequestHandler = async (req, res, next) => {
 const add: RequestHandler = async (req, res, next) => {
   try {
     // Extract the item data from the request body
-    const { Title, ReleaseYear, Synopsis, PosterURL, Rating, director_id } = req.body;
-
+    const { Title, ReleaseYear, Synopsis, PosterURL, Rating, tmdb_id, director_id } = req.body;
+// Validation simple pour faire plaisir aux tests (erreur 400 si Title manque)
+    if (!Title || !tmdb_id) {
+      res.status(400).json({ message: "Missing required fields" });
+      return;
+    }
     // Create the item
-    const insertId = await movieRepository.create({Title, ReleaseYear, Synopsis, PosterURL, Rating, director_id });
+    const insertId = await movieRepository.create({Title, ReleaseYear, Synopsis, PosterURL, Rating, tmdb_id, director_id });
 
     // Respond with HTTP 201 (Created) and the ID of the newly inserted item
     res.status(201).json({ insertId });
@@ -52,5 +58,37 @@ const add: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+const edit: RequestHandler = async (req, res, next) => {
+  try {
+    const movie = { ...req.body, id: Number(req.params.id) };
+    // Validation simple pour le test (400 si body vide)
+    if (Object.keys(req.body).length === 0) {
+      res.sendStatus(400);
+      return;
+    }
+    const affectedRows = await movieRepository.update(movie);
+    if (affectedRows === 0) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
 
-export default { browse, read, add };
+const destroy: RequestHandler = async (req, res, next) => {
+  try {
+    const affectedRows = await movieRepository.delete(Number(req.params.id));
+    if (affectedRows === 0) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, read, add, edit, destroy }; // N'oublie pas d'ajouter edit et destroy ici
+

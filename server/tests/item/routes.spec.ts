@@ -14,9 +14,11 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-// Test suite for the GET /api/items route
-describe("GET /api/items", () => {
-  it("should fetch items successfully", async () => {
+/* ************************************************************************* */
+// Test suite for the GET /api/movies route
+/* ************************************************************************* */
+describe("GET /api/movies", () => {
+  it("should fetch movies successfully", async () => {
     // Mock empty rows returned from the database
     const rows = [] as Rows;
 
@@ -25,8 +27,8 @@ describe("GET /api/items", () => {
       .spyOn(databaseClient, "query")
       .mockImplementation(async () => [rows, []]);
 
-    // Send a GET request to the /api/items endpoint
-    const response = await supertest(app).get("/api/items");
+    // Send a GET request to the /api/movies endpoint
+    const response = await supertest(app).get("/api/movies");
 
     // Assertions
     expect(response.status).toBe(200);
@@ -34,19 +36,30 @@ describe("GET /api/items", () => {
   });
 });
 
-// Test suite for the GET /api/items/:id route
-describe("GET /api/items/:id", () => {
-  it("should fetch a single item successfully", async () => {
+/* ************************************************************************* */
+// Test suite for the GET /api/movies/:id route
+/* ************************************************************************* */
+describe("GET /api/movies/:id", () => {
+  it("should fetch a single movie successfully", async () => {
     // Mock rows returned from the database
-    const rows = [{}] as Rows;
+    const rows = [{ 
+      id: 1, 
+      Title: "Inception", 
+      ReleaseYear: 2010, 
+      Synopsis: "A thief who steals corporate secrets...",
+      PosterURL: "https://image.tmdb.org/t/p/w500/etc.jpg",
+      Rating: 8.8,
+      tmdb_id: 27205,
+      director_id: 1
+    }] as Rows;
 
     // Mock the implementation of the database query method
     jest
       .spyOn(databaseClient, "query")
       .mockImplementation(async () => [rows, []]);
 
-    // Send a GET request to the /api/items/:id endpoint
-    const response = await supertest(app).get("/api/items/1");
+    // Send a GET request to the /api/movies/:id endpoint
+    const response = await supertest(app).get("/api/movies/1");
 
     // Assertions
     expect(response.status).toBe(200);
@@ -54,7 +67,7 @@ describe("GET /api/items/:id", () => {
   });
 
   it("should fail on invalid id", async () => {
-    // Mock empty rows returned from the database
+    // Mock empty rows returned from the database (movie not found)
     const rows = [] as Rows;
 
     // Mock the implementation of the database query method
@@ -62,8 +75,8 @@ describe("GET /api/items/:id", () => {
       .spyOn(databaseClient, "query")
       .mockImplementation(async () => [rows, []]);
 
-    // Send a GET request to the /api/items/:id endpoint with an invalid ID
-    const response = await supertest(app).get("/api/items/0");
+    // Send a GET request to the /api/movies/:id endpoint with an ID that doesn't exist
+    const response = await supertest(app).get("/api/movies/0");
 
     // Assertions
     expect(response.status).toBe(404);
@@ -71,10 +84,11 @@ describe("GET /api/items/:id", () => {
   });
 });
 
-// Test suite for the POST /api/items route
-// Doesn't pass: maybe something to change in app config :/
-describe("POST /api/items", () => {
-  it("should add a new item successfully", async () => {
+/* ************************************************************************* */
+// Test suite for the POST /api/movies route
+/* ************************************************************************* */
+describe("POST /api/movies", () => {
+  it("should add a new movie successfully", async () => {
     // Mock result of the database query
     const result = { insertId: 1 } as Result;
 
@@ -83,11 +97,19 @@ describe("POST /api/items", () => {
       .spyOn(databaseClient, "query")
       .mockImplementation(async () => [result, []]);
 
-    // Fake item data
-    const fakeItem = { title: "foo", user_id: 0 };
+    // Fake movie data matching your database structure
+    const fakeMovie = { 
+      Title: "Interstellar", 
+      ReleaseYear: 2014,
+      Synopsis: "A team of explorers travel through a wormhole...",
+      PosterURL: "https://image.tmdb.org/t/p/w500/interstellar.jpg",
+      Rating: 8.6,
+      tmdb_id: 157336,
+      director_id: 1
+    };
 
-    // Send a POST request to the /api/items endpoint with a test item
-    const response = await supertest(app).post("/api/items").send(fakeItem);
+    // Send a POST request to the /api/movies endpoint
+    const response = await supertest(app).post("/api/movies").send(fakeMovie);
 
     // Assertions
     expect(response.status).toBe(201);
@@ -96,30 +118,27 @@ describe("POST /api/items", () => {
   });
 
   it("should fail on invalid request body", async () => {
-    // Mock result of the database query
-    const result = { insertId: 1 } as Result;
+    // Fake movie data with missing required fields (like Title or tmdb_id)
+    const invalidMovie = { 
+      ReleaseYear: 2010 
+      // Title and tmdb_id are missing
+    };
 
-    // Mock the implementation of the database query method
-    jest
-      .spyOn(databaseClient, "query")
-      .mockImplementation(async () => [result, []]);
-
-    // Fake item data with missing user_id
-    const fakeItem = { title: "foo" };
-
-    // Send a POST request to the /api/items endpoint with a test item
-    const response = await supertest(app).post("/api/items").send(fakeItem);
+    // Send a POST request to the /api/movies endpoint
+    const response = await supertest(app).post("/api/movies").send(invalidMovie);
 
     // Assertions
+    // Note: This requires a validation check in your movieActions.ts
     expect(response.status).toBe(400);
-    expect(response.body).toEqual({});
+    expect(response.body).toEqual({ message: "Missing required fields" });
   });
 });
 
-// Test suite for the PUT /api/items/:id route
-// This route is not yet implemented :/
-describe("PUT /api/items/:id", () => {
-  it("should update an existing item successfully", async () => {
+/* ************************************************************************* */
+// Test suite for the PUT /api/movies/:id route
+/* ************************************************************************* */
+describe("PUT /api/movies/:id", () => {
+  it("should update an existing movie successfully", async () => {
     // Mock result of the database query
     const result = { affectedRows: 1 } as Result;
 
@@ -128,51 +147,48 @@ describe("PUT /api/items/:id", () => {
       .spyOn(databaseClient, "query")
       .mockImplementation(async () => [result, []]);
 
-    // Fake item data
-    const fakeItem = { title: "foo", user_id: 0 };
+    // Movie data to update
+    const updatedMovie = { 
+      Title: "Inception Updated",
+      Rating: 9.0
+    };
 
-    // Send a PUT request to the /api/items/:id endpoint with a test item
-    const response = await supertest(app).put("/api/items/42").send(fakeItem);
+    // Send a PUT request to the /api/movies/:id endpoint
+    const response = await supertest(app).put("/api/movies/1").send(updatedMovie);
 
     // Assertions
     expect(response.status).toBe(204);
     expect(response.body).toEqual({});
   });
 
-  it("should fail on invalid request body", async () => {
-    // Mock result of the database query
+  it("should fail on invalid request body during update", async () => {
     const result = { affectedRows: 1 } as Result;
 
-    // Mock the implementation of the database query method
     jest
       .spyOn(databaseClient, "query")
       .mockImplementation(async () => [result, []]);
 
-    // Fake item data with missing user_id
-    const fakeItem = { title: "foo" };
+    // Empty body or invalid format
+    const invalidData = {};
 
-    // Send a PUT request to the /api/items/:id endpoint with a test item
-    const response = await supertest(app).put("/api/items/42").send(fakeItem);
+    const response = await supertest(app).put("/api/movies/1").send(invalidData);
 
     // Assertions
     expect(response.status).toBe(400);
     expect(response.body).toEqual({});
   });
 
-  it("should fail on invalid id", async () => {
-    // Mock result of the database query
+  it("should fail on invalid id during update", async () => {
+    // Mock result: 0 rows affected means ID was not found
     const result = { affectedRows: 0 } as Result;
 
-    // Mock the implementation of the database query method
     jest
       .spyOn(databaseClient, "query")
       .mockImplementation(async () => [result, []]);
 
-    // Fake item data with missing user_id
-    const fakeItem = { title: "foo", user_id: 0 };
+    const someData = { Title: "Doesn't matter" };
 
-    // Send a PUT request to the /api/items/:id endpoint with a test item
-    const response = await supertest(app).put("/api/items/43").send(fakeItem);
+    const response = await supertest(app).put("/api/movies/999").send(someData);
 
     // Assertions
     expect(response.status).toBe(404);
@@ -180,10 +196,11 @@ describe("PUT /api/items/:id", () => {
   });
 });
 
-// Test suite for the DELETE /api/items/:id route
-// This route is not yet implemented :/
-describe("DELETE /api/items/:id", () => {
-  it("should delete an existing item successfully", async () => {
+/* ************************************************************************* */
+// Test suite for the DELETE /api/movies/:id route
+/* ************************************************************************* */
+describe("DELETE /api/movies/:id", () => {
+  it("should delete an existing movie successfully", async () => {
     // Mock result of the database query
     const result = { affectedRows: 1 } as Result;
 
@@ -192,25 +209,24 @@ describe("DELETE /api/items/:id", () => {
       .spyOn(databaseClient, "query")
       .mockImplementation(async () => [result, []]);
 
-    // Send a DELETE request to the /api/items/:id endpoint
-    const response = await supertest(app).delete("/api/items/42");
+    // Send a DELETE request to the /api/movies/:id endpoint
+    const response = await supertest(app).delete("/api/movies/1");
 
     // Assertions
     expect(response.status).toBe(204);
     expect(response.body).toEqual({});
   });
 
-  it("should fail on invalid id", async () => {
-    // Mock result of the database query
+  it("should fail on invalid id during deletion", async () => {
+    // Mock result: 0 rows affected
     const result = { affectedRows: 0 } as Result;
 
-    // Mock the implementation of the database query method
     jest
       .spyOn(databaseClient, "query")
       .mockImplementation(async () => [result, []]);
 
-    // Send a DELETE request to the /api/items/:id endpoint
-    const response = await supertest(app).delete("/api/items/43");
+    // Send a DELETE request with an unknown ID
+    const response = await supertest(app).delete("/api/movies/999");
 
     // Assertions
     expect(response.status).toBe(404);

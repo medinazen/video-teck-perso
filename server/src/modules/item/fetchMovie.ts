@@ -28,7 +28,9 @@ export const getPopularMovies = async () => {
   return data.results;
 };
 export const searchMovies = async (query: string) => {
-  const data = await tmdbFetch("/search/movie", { query, language: "en-US" });
+  // On utilise "fr-FR" au lieu de "en-US"
+  const data = await tmdbFetch("/search/movie", { query, language: "fr-FR" });
+  return data.results;;
 
   return data.results;
 };
